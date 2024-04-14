@@ -60,12 +60,25 @@ def test():
 sol = test() # this works!
 ```
 
+Integration over (semi-) infinite intervals.
 ```python
 from NumbaQuadpack import dqagi
-@nb.cfunc(quadpack_sig)
-def f(x, data):
+
+@nb.njit(nogil=True)
+def exp_test(x):
     return np.exp(-x**2)
+
+@nb.cfunc(quadpack_sig)
+def f(x, data_):
+    c, d, e = nb.carray(data_, (3,))
+    return exp_test(x) + c + d * e
 funcptr = f.address
-sol, abserr, success = dqagi(funcptr, 0, 2,)
+
+@nb.njit()
+def test():
+    data = np.array([1.0, 1.0, 2.0],np.float64)
+    sol, abserr, success = dqagi(funcptr, 0, 2, data = data)
+    return sol, abserr, success
+sol, abserr, success = test()
 sol, abserr, success
 ```
