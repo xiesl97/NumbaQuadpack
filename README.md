@@ -59,3 +59,13 @@ def test():
     return sol
 sol = test() # this works!
 ```
+
+```python
+from NumbaQuadpack import dqagi
+@nb.cfunc(quadpack_sig)
+def f(x, data):
+    return np.exp(-x**2)
+funcptr = f.address
+sol, abserr, success = dqagi(funcptr, 0, 2,)
+sol, abserr, success
+```
