@@ -10,7 +10,7 @@ For most definite integrals, with non-infinite bounds `NumbaQuadpack.dqags` does
 After satisfying the dependencies, install with the pip command below
 
 ```
-python -m pip install git+git://github.com/Nicholaswogan/NumbaQuadpack.git
+pip install -U git+https://github.com/xiesl97/NumbaQuadpack
 ```
 
 ## Basic usage
