@@ -49,6 +49,6 @@ class build_ext(build_ext_orig):
 
 setup(name = 'NumbaQuadpack',
       packages=['NumbaQuadpack'],
-      version='0.1',
+      version='0.1.1',
       ext_modules=[CMakeExtension('NumbaQuadpack/')],
       cmdclass={'build_ext': build_ext,})
