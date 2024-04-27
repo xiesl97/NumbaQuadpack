@@ -81,3 +81,35 @@ def dqng(funcptr, a, b, data = np.array([0.0], np.float64), epsabs = 1.49e-08, e
         success = False
         
     return sol, abserr.item(), success
+
+
+# # # # dqag
+dqag_ = libquadpack.dqag
+dqag_.argtypes = [ct.c_void_p, ct.c_double, ct.c_double, ct.c_double, ct.c_double, \
+                 ct.c_void_p, ct.c_void_p, ct.c_void_p, ct.c_void_p, ct.c_void_p,]
+dqag_.restype = ct.c_double
+@njit
+def dqag(funcptr, a, b, data = np.array([0.0], np.float64), epsabs = 1.49e-08, epsrel = 1.49e-08, irule=1):
+    '''
+    irule - integration rule to be used as follows:
+        irule = 1 -- G_K 7-15
+        irule = 2 -- G_K 10-21
+        irule = 3 -- G_K 15-31
+        irule = 4 -- G_K 20-41
+        irule = 5 -- G_K 25-51
+        irule = 6 -- G_K 30-61
+    '''
+    abserr = np.array(0.0,np.float64)
+    neval = np.array(0,np.int32)
+    ier = np.array(0,np.int32)
+    
+    sol = dqag_(funcptr, a, b, epsabs, epsrel, irule, \
+                 abserr.ctypes.data, neval.ctypes.data, \
+                 ier.ctypes.data, data.ctypes.data)
+    
+    success = True
+    if ier != 0:
+        success = False
+        
+    return sol, abserr.item(), success
+
